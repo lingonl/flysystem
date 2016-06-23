@@ -441,9 +441,16 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
         list($date, $time, $size, $name) = explode(' ', $item, 4);
         $path = empty($base) ? $name : $base . $this->separator . $name;
-
+        
         // Check for the correct date/time format
-        $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
+        if(strlen($date) === 10) {
+            $format = 'm-d-YH:iA';
+        } elseif(strlen($date) === 8) {
+            $format = 'm-d-yH:iA';
+        } else {
+            $format = 'Y-m-dH:i';
+        }
+        
         $dt = DateTime::createFromFormat($format, $date . $time);
 
         // Check $dt before getting the timestamp
